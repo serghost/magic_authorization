@@ -27,8 +27,9 @@ module MagicAuthorization
                       },
                       status: :not_found) 
       end
-      
-      unless @@auth_method
+
+      # logger.info(@@auth_method)
+      unless current_user.has_role?(:admin)
         logger.info "Not admin; #{model_instance}"
         if get_owner_of(model_instance).id != current_user.id
           logger.info "current user id is #{current_user.id}"
