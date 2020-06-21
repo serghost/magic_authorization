@@ -14,12 +14,12 @@ module MagicAuthorization
     #
     #    set_model_instance(Profile, :user_id)
     #
-    def set_model_instance(model:, param_col:, security_level: 0)
+    def set_model_instance(model:, param_col:, security_level: 0, polymorphic: false)
       # try to find the instance by parameter
       model_instance = instance_variable_set("@#{model.model_name.singular}", model.find_by(id: params[param_col]))
       
-      # early return if the instance is not found
-      unless model_instance
+      # early return if the instance is not found OR unless polymorphic
+      unless model_instance or polymorphic
         return render(json: {
                         errors: {
                           generic: "#{model} not found"
